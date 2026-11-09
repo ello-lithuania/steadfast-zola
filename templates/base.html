@@ -43,13 +43,13 @@
 </div>{% endif %}
 
 <header class="site-nav sticky-top">
-  <nav class="navbar navbar-expand-lg py-3" aria-label="Main navigation">
+  <nav class="navbar navbar-expand-xl py-3" aria-label="Main navigation">
     <div class="container">
       <a class="brand" href="{{ root }}">
         <span class="brand-mark">{{ <sficon name={e.brand_icon or "wrench"} class="icon icon-sm" /> }}</span>
         {{ e.brand | default(value=config.title) }}
       </a>
-      <div class="d-flex align-items-center gap-2 order-lg-3">
+      <div class="d-flex align-items-center gap-2 order-xl-3">
         <button class="btn btn-sf-ghost theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
           {{ <sficon name="sun" class="icon icon-sm icon-sun" /> }}
           {{ <sficon name="moon" class="icon icon-sm icon-moon" /> }}
@@ -59,7 +59,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
       </div>
-      <div class="collapse navbar-collapse order-lg-2" id="mainNav">
+      <div class="collapse navbar-collapse order-xl-2" id="mainNav">
         <ul class="navbar-nav mx-auto">
           {% for item in e.nav | default(value=[]) %}<li class="nav-item"><a class="nav-link" href="{{ <sfhref url={item.url} home={home} /> }}">{{ item.name }}</a></li>
           {% endfor %}

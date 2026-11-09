@@ -298,3 +298,9 @@ a { text-underline-offset: .18em; }
 .post-list li { padding-block: 1.25rem; border-top: 1px solid var(--sf-line); }
 .post-list h2 { font-size: 1.3rem; margin: 0 0 .35rem; }
 .post-list time { font-size: .875rem; color: var(--sf-muted); }
+
+/* Keep navigation labels and the header button on one line. */
+.site-nav .nav-link, .site-nav .btn { white-space: nowrap; }
+@media (max-width: 1199.98px) {
+  .site-nav .navbar-collapse { padding-block: .75rem 1rem; }
+}
