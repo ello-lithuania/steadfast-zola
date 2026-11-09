@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ section.title | default(value="Blog") }} | {{ config.extra.brand | default(value=config.title) }}{% endblock title %}
+{% block description %}{{ section.description | default(value=config.description) }}{% endblock description %}
+
+{% block content %}
+<div class="container page-wrap">
+  <div class="prose">
+    <h1>{{ section.title | default(value="Blog") }}</h1>
+    {{ section.content | safe }}
+  </div>
+  <ul class="post-list">
+    {% for p in section.pages %}<li>
+      <h2><a href="{{ p.permalink }}">{{ p.title }}</a></h2>
+      {% if p.date %}<time datetime="{{ p.date }}">{{ p.date | date(format="%e %B %Y") }}</time>{% endif %}
+      {% if p.description %}<p class="text-muted-sf mt-2 mb-0">{{ p.description }}</p>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock content %}

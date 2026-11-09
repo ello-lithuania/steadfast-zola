@@ -1,0 +1,44 @@
+name = "steadfast"
+description = "One-page landing theme for small service businesses: services, process, pricing, reviews, FAQ and contact, with light and dark modes. Built on Bootstrap 5, no build step."
+license = "MIT"
+homepage = "https://github.com/ello-lithuania/steadfast-zola"
+min_version = "0.19.0"
+demo = "https://ello-lithuania.github.io/steadfast-zola/"
+
+[author]
+name = "KokybiskaSvetaine.lt"
+homepage = "https://kokybiskasvetaine.lt/"
+
+[extra]
+brand = "Steadfast"
+brand_icon = "wrench"
+tagline = "Reliable home repairs for the jobs that keep getting put off. Fair prices, tidy work and a 12-month guarantee."
+topbar_text = "Open Monday to Saturday, 8:00 to 18:00"
+phone = "+1 000 000 0000"
+phone_href = "+10000000000"
+email = "hello@example.com"
+cta_label = "Get a free quote"
+cta_url = "#contact"
+credit = true
+nav = [
+  { name = "Services", url = "#services" },
+  { name = "How it works", url = "#process" },
+  { name = "Recent work", url = "#work" },
+  { name = "Pricing", url = "#pricing" },
+  { name = "Reviews", url = "#reviews" },
+  { name = "FAQ", url = "#faq" },
+  { name = "Contact", url = "#contact" },
+]
+footer_columns = [
+  { title = "Company", links = [
+    { name = "Services", url = "#services" },
+    { name = "How it works", url = "#process" },
+    { name = "Recent work", url = "#work" },
+    { name = "Reviews", url = "#reviews" },
+  ] },
+  { title = "Help", links = [
+    { name = "Pricing", url = "#pricing" },
+    { name = "FAQ", url = "#faq" },
+    { name = "Contact", url = "#contact" },
+  ] },
+]

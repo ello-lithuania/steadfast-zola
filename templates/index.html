@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+
+{% block title %}{{ section.title | default(value=config.title) }}{% endblock title %}
+{% block description %}{{ section.description | default(value=config.description) }}{% endblock description %}
+
+{% block content %}
+{% set x = section.extra %}
+<span id="top"></span>
+
+{% if x.hero %}
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center gy-5 gx-lg-5">
+      <div class="col-lg-6">
+        <span class="eyebrow">{{ x.hero.eyebrow }}</span>
+        <h1>{{ x.hero.title_start }} <span class="hero-highlight">{{ x.hero.title_mark }}</span>{{ x.hero.title_end }}</h1>
+        <p class="hero-lead mt-4">{{ x.hero.lead }}</p>
+        <div class="d-flex flex-wrap gap-3 mt-4">
+          {% if x.hero.primary %}<a class="btn btn-sf btn-lg" href="{{ x.hero.primary.url }}">{{ x.hero.primary.label }}
+            {{ m::icon(name="arrow", class="icon icon-sm") }}
+          </a>{% endif %}
+          {% if x.hero.secondary %}<a class="btn btn-sf-ghost btn-lg" href="{{ x.hero.secondary.url }}">{{ x.hero.secondary.label }}</a>{% endif %}
+        </div>
+        {% if x.hero.trust %}<div class="hero-trust">
+          {% for t in x.hero.trust %}<div><strong>{{ t.value }}</strong>{{ t.label }}</div>
+          {% endfor %}
+        </div>{% endif %}
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-art">
+          {% if x.hero.image %}<img class="img-fluid rounded-4" src="{{ get_url(path=x.hero.image) }}" alt="{{ x.hero.image_alt | default(value='') }}">{% else %}
+          <svg viewBox="0 0 560 520" role="img" aria-label="Illustration of a small house with a ladder and a toolbox">
+            <rect class="i-bg" x="30" y="30" width="500" height="460" rx="36"/>
+            <circle class="i-sun" cx="430" cy="118" r="46"/>
+            <path class="i-ground" d="M30 420h500v34a36 36 0 0 1-36 36H66a36 36 0 0 1-36-36z"/>
+            <rect class="i-wall" x="350" y="150" width="36" height="66" />
+            <path class="i-roof" d="M126 262 280 132l154 130z"/>
+            <rect class="i-wall" x="152" y="262" width="256" height="170"/>
+            <rect class="i-door" x="250" y="330" width="62" height="102"/>
+            <circle class="i-ink" cx="298" cy="384" r="4"/>
+            <rect class="i-glass" x="176" y="298" width="52" height="52"/>
+            <path class="i-line" d="M202 298v52M176 324h52"/>
+            <rect class="i-glass" x="334" y="298" width="52" height="52"/>
+            <path class="i-line" d="M360 298v52M334 324h52"/>
+            <path class="i-line" d="M84 432 126 214M128 432l42-218M99 356h44M107 316h44M115 276h44M92 394h44"/>
+            <rect class="i-accent" x="414" y="392" width="84" height="40" rx="6"/>
+            <rect class="i-line" x="414" y="392" width="84" height="40" rx="6"/>
+            <path class="i-line" d="M438 392v-10a6 6 0 0 1 6-6h24a6 6 0 0 1 6 6v10M414 410h84"/>
+            <path class="i-line" d="M60 432h440"/>
+          </svg>{% endif %}
+          {% for b in x.hero.badges | default(value=[]) %}<div class="hero-badge b{{ loop.index }}">
+            <span class="dot">{{ m::icon(name=b.icon, class="icon icon-sm") }}</span>
+            <div><strong>{{ b.title }}</strong><span>{{ b.text }}</span></div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if x.services %}
+<section class="section section-alt" id="services">
+  <div class="container">
+    {{ m::head(sec=x.services) }}
+    <div class="row g-4">
+      {% for s in x.services.items %}<div class="col-md-6 col-lg-4 reveal"><article class="sf-card">
+        <div class="icon-tile">{{ m::icon(name=s.icon) }}</div>
+        <h3>{{ s.title }}</h3>
+        <p>{{ s.text }}</p>
+        {% if s.from %}<span class="from">{{ s.from }}</span>{% endif %}
+      </article></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if x.process %}
+<section class="section" id="process">
+  <div class="container">
+    {{ m::head(sec=x.process) }}
+    <div class="row g-4 steps">
+      {% for s in x.process.steps %}<div class="col-md-6 col-lg-3 reveal"><div class="step">
+        <h3>{{ s.title }}</h3>
+        <p>{{ s.text }}</p>
+      </div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if x.work %}
+<section class="section section-alt" id="work">
+  <div class="container">
+    {{ m::head(sec=x.work) }}
+    <div class="row g-4">
+      {% for w in x.work.items %}<div class="col-md-4 reveal"><article class="work-card">
+        {% if w.image %}<img class="w-100" src="{{ get_url(path=w.image) }}" alt="{{ w.image_alt | default(value='') }}">{% else %}{{ m::art(name=w.art | default(value="tap")) }}{% endif %}
+        <div class="work-body">{% if w.tag %}<span class="tag">{{ w.tag }}</span>{% endif %}<h3>{{ w.title }}</h3><p>{{ w.text }}</p></div>
+      </article></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if x.pricing %}
+<section class="section" id="pricing">
+  <div class="container">
+    {{ m::head(sec=x.pricing) }}
+    <div class="row g-4 align-items-stretch">
+      {% for p in x.pricing.plans %}<div class="col-lg-4 reveal"><div class="price-card{% if p.featured %} featured{% endif %}">
+        {% if p.flag %}<span class="price-flag">{{ p.flag }}</span>{% endif %}
+        <h3>{{ p.name }}</h3>
+        <div class="price">{{ p.price }} <small>{{ p.unit }}</small></div>
+        <p class="text-muted-sf mb-0">{{ p.text }}</p>
+        <ul class="price-list">
+          {% for f in p.features %}<li>{{ m::icon(name="check", class="icon icon-sm") }}{{ f }}</li>
+          {% endfor %}
+        </ul>
+        <a class="btn {% if p.featured %}btn-sf{% else %}btn-sf-ghost{% endif %} w-100" href="{{ p.url }}">{{ p.cta }}</a>
+      </div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if x.reviews %}
+<section class="section section-alt" id="reviews">
+  <div class="container">
+    {{ m::head(sec=x.reviews) }}
+    <div class="row g-4">
+      {% for r in x.reviews.items %}<div class="col-md-4 reveal"><figure class="review">
+        <div class="stars" role="img" aria-label="5 out of 5 stars">{% for i in range(end=5) %}<svg aria-hidden="true"><use href="#i-star"></use></svg>{% endfor %}</div>
+        <blockquote>{{ r.quote }}</blockquote>
+        <figcaption><span class="avatar" aria-hidden="true">{{ r.initials }}</span><div>{{ r.name }}<span>{{ r.detail }}</span></div></figcaption>
+      </figure></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if x.faq %}
+<section class="section" id="faq">
+  <div class="container">
+    <div class="row gy-5 gx-lg-5">
+      <div class="col-lg-4 reveal">
+        <span class="eyebrow">{{ x.faq.eyebrow }}</span>
+        <h2>{{ x.faq.title }}</h2>
+        {% if x.faq.lead %}<p class="text-muted-sf mt-3">{{ x.faq.lead }}</p>{% endif %}
+      </div>
+      <div class="col-lg-8 reveal">
+        <div class="accordion" id="faqList">
+          {% for f in x.faq.items %}<div class="accordion-item">
+            <h3 class="accordion-header"><button class="accordion-button{% if not loop.first %} collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#q{{ loop.index }}" aria-expanded="{% if loop.first %}true{% else %}false{% endif %}" aria-controls="q{{ loop.index }}">{{ f.q }}</button></h3>
+            <div id="q{{ loop.index }}" class="accordion-collapse collapse{% if loop.first %} show{% endif %}" data-bs-parent="#faqList"><div class="accordion-body">{{ f.a }}</div></div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if x.contact %}{% set c = x.contact %}{% set e = config.extra %}
+<section class="section section-alt" id="contact">
+  <div class="container">
+    <div class="row gy-5 gx-lg-5">
+      <div class="col-lg-5 reveal">
+        <span class="eyebrow">{{ c.eyebrow }}</span>
+        <h2>{{ c.title }}</h2>
+        {% if c.lead %}<p class="text-muted-sf mt-3">{{ c.lead }}</p>{% endif %}
+        <ul class="contact-list mt-4">
+          {% if e.phone %}<li>{{ m::icon(name="phone") }}<div><strong>Phone</strong><a href="tel:{{ e.phone_href | default(value=e.phone) }}">{{ e.phone }}</a></div></li>{% endif %}
+          {% if e.email %}<li>{{ m::icon(name="mail") }}<div><strong>Email</strong><a href="mailto:{{ e.email }}">{{ e.email }}</a></div></li>{% endif %}
+          {% if c.address %}<li>{{ m::icon(name="pin") }}<div><strong>{{ c.address_label | default(value="Address") }}</strong><span>{{ c.address }}</span></div></li>{% endif %}
+          {% if c.hours %}<li>{{ m::icon(name="clock") }}<div><strong>Hours</strong><span>{{ c.hours }}</span></div></li>{% endif %}
+        </ul>
+        <div class="map">
+          <svg viewBox="0 0 480 220" role="img" aria-label="Map placeholder">
+            <rect class="m-bg" width="480" height="220"/>
+            <rect class="m-park" x="300" y="20" width="150" height="90" rx="12"/>
+            <path class="m-road" d="M-10 150C100 130 180 170 260 120S400 60 490 150"/>
+            <path class="m-road-s" d="M90 -10 150 230M260 -10l30 240M400 -10l-40 240M-10 60h500"/>
+            <path class="m-pin" d="M240 140s34-30 34-56a34 34 0 0 0-68 0c0 26 34 56 34 56z"/>
+            <circle class="m-pin-c" cx="240" cy="84" r="13"/>
+          </svg>
+        </div>
+      </div>
+      <div class="col-lg-7 reveal">
+        <div class="contact-panel">
+          <form id="contactForm" novalidate{% if c.form_action %} method="post" action="{{ c.form_action }}"{% else %} data-demo{% endif %}>
+            <div class="row g-3">
+              <div class="col-sm-6">
+                <label class="form-label" for="name">Your name</label>
+                <input class="form-control" id="name" name="name" type="text" autocomplete="name" required>
+                <div class="invalid-feedback">Please enter your name.</div>
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label" for="phone">Phone</label>
+                <input class="form-control" id="phone" name="phone" type="tel" autocomplete="tel" required>
+                <div class="invalid-feedback">Please enter a phone number.</div>
+              </div>
+              <div class="col-12">
+                <label class="form-label" for="email">Email</label>
+                <input class="form-control" id="email" name="email" type="email" autocomplete="email" required>
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+              </div>
+              {% if c.options %}<div class="col-12">
+                <label class="form-label" for="service">{{ c.select_label }}</label>
+                <select class="form-select" id="service" name="service" required>
+                  <option value="">{{ c.select_placeholder }}</option>
+                  {% for o in c.options %}<option>{{ o }}</option>
+                  {% endfor %}
+                </select>
+                <div class="invalid-feedback">Please choose an option.</div>
+              </div>{% endif %}
+              <div class="col-12">
+                <label class="form-label" for="message">{{ c.message_label }}</label>
+                <textarea class="form-control" id="message" name="message" rows="5" placeholder="{{ c.message_placeholder }}" required></textarea>
+                <div class="invalid-feedback">Please add a short description.</div>
+              </div>
+              <div class="col-12 d-flex flex-wrap align-items-center gap-3">
+                <button class="btn btn-sf btn-lg" type="submit">{{ c.submit }}
+                  {{ m::icon(name="arrow", class="icon icon-sm") }}
+                </button>
+                {% if c.note %}<span class="form-note">{{ c.note }}</span>{% endif %}
+              </div>
+              <div class="col-12">
+                <div class="alert alert-success form-success mb-0" role="status" tabindex="-1">{{ c.success }}</div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if x.cta %}
+<section class="section pb-0 pt-5 mt-3">
+  <div class="container">
+    <div class="cta-band reveal">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+          <h2>{{ x.cta.title }}</h2>
+          <p class="mt-2">{{ x.cta.text }}</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+          <a class="btn btn-light btn-lg" href="{{ x.cta.url }}">{{ x.cta.label }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock content %}

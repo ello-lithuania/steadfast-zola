@@ -1,0 +1,112 @@
+{% import "macros.html" as m %}{% set e = config.extra %}{% set home = "" %}{% if not current_path or current_path != "/" %}{% set home = get_url(path="/") %}{% endif %}<!doctype html>
+<html lang="{{ lang }}" data-bs-theme="light" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+  <meta name="description" content="{% block description %}{{ config.description | default(value="") }}{% endblock description %}">
+  <meta name="theme-color" content="#0d5c4b">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ config.title }}">
+  {% if e.og_image %}<meta property="og:image" content="{{ get_url(path=e.og_image) }}">{% endif %}
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230d5c4b'/%3E%3Cpath d='M8 16l8-7 8 7v8H8z' fill='%23fff'/%3E%3C/svg%3E">
+  <script>
+    /* Set the theme before first paint so the page does not flash. */
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem('sf-theme'); } catch (e) {}
+      var dark = saved ? saved === 'dark' : (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+      var el = document.documentElement;
+      el.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
+      el.classList.remove('no-js');
+      el.classList.add('js');
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ get_url(path='assets/vendor/bootstrap/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ get_url(path='assets/css/style.css') }}">
+  {% block head %}{% endblock head %}
+</head>
+<body data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-root-margin="-20% 0px -65% 0px" tabindex="0">
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+{% include "partials/sprite.html" %}
+
+{% if e.topbar_text or e.phone %}<div class="topbar py-2 d-none d-md-block">
+  <div class="container d-flex justify-content-between">
+    <span>{{ e.topbar_text | default(value="") }}</span>
+    {% if e.phone %}<span>Need help today? <a href="tel:{{ e.phone_href | default(value=e.phone) }}">Call {{ e.phone }}</a></span>{% endif %}
+  </div>
+</div>{% endif %}
+
+<header class="site-nav sticky-top">
+  <nav class="navbar navbar-expand-lg py-3" aria-label="Main navigation">
+    <div class="container">
+      <a class="brand" href="{{ get_url(path='/') }}">
+        <span class="brand-mark">{{ m::icon(name=e.brand_icon | default(value="wrench"), class="icon icon-sm") }}</span>
+        {{ e.brand | default(value=config.title) }}
+      </a>
+      <div class="d-flex align-items-center gap-2 order-lg-3">
+        <button class="btn btn-sf-ghost theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
+          {{ m::icon(name="sun", class="icon icon-sm icon-sun") }}
+          {{ m::icon(name="moon", class="icon icon-sm icon-moon") }}
+        </button>
+        {% if e.cta_label %}<a class="btn btn-sf d-none d-sm-inline-flex" href="{{ home }}{{ e.cta_url | default(value='#contact') }}">{{ e.cta_label }}</a>{% endif %}
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse order-lg-2" id="mainNav">
+        <ul class="navbar-nav mx-auto">
+          {% for item in e.nav | default(value=[]) %}<li class="nav-item"><a class="nav-link" href="{% if item.url is starting_with("#") %}{{ home }}{{ item.url }}{% elif item.url is starting_with("/") %}{{ get_url(path=item.url) }}{% else %}{{ item.url }}{% endif %}">{{ item.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main id="main">
+{% block content %}{% endblock content %}
+</main>
+
+<footer class="site-footer mt-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <a class="brand" href="{{ get_url(path='/') }}">
+          <span class="brand-mark">{{ m::icon(name=e.brand_icon | default(value="wrench"), class="icon icon-sm") }}</span>
+          {{ e.brand | default(value=config.title) }}
+        </a>
+        {% if e.tagline %}<p class="text-muted-sf mt-3 mb-0" style="max-width:26rem">{{ e.tagline }}</p>{% endif %}
+      </div>
+      {% for col in e.footer_columns | default(value=[]) %}<div class="col-6 col-lg-2{% if loop.first %} offset-lg-1{% endif %}">
+        <h4>{{ col.title }}</h4>
+        <ul>
+          {% for item in col.links %}<li><a href="{% if item.url is starting_with("#") %}{{ home }}{{ item.url }}{% elif item.url is starting_with("/") %}{{ get_url(path=item.url) }}{% else %}{{ item.url }}{% endif %}">{{ item.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+      {% if e.phone or e.email %}<div class="col-lg-2">
+        <h4>Get in touch</h4>
+        <ul>
+          {% if e.phone %}<li><a href="tel:{{ e.phone_href | default(value=e.phone) }}">{{ e.phone }}</a></li>{% endif %}
+          {% if e.email %}<li><a href="mailto:{{ e.email }}">{{ e.email }}</a></li>{% endif %}
+        </ul>
+      </div>{% endif %}
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year">{{ now() | date(format="%Y") }}</span> {{ e.brand | default(value=config.title) }}. All rights reserved.</span>
+      {% if e.credit %}<span>Theme by <a href="https://kokybiskasvetaine.lt/" rel="nofollow">KokybiskaSvetaine.lt</a></span>{% endif %}
+    </div>
+  </div>
+</footer>
+
+<script src="{{ get_url(path='assets/vendor/bootstrap/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ get_url(path='assets/js/main.js') }}"></script>
+</body>
+</html>
