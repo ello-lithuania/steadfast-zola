@@ -1,12 +1,12 @@
-{% macro icon(name, class="icon") %}<svg class="{{ class }}" aria-hidden="true"><use href="#i-{{ name }}"></use></svg>{% endmacro icon %}
+{% component sficon(name, class="icon") %}<svg class="{{ class }}" aria-hidden="true"><use href="#i-{{ name }}"></use></svg>{% endcomponent sficon %}
 
-{% macro head(sec) %}<div class="section-head reveal">
+{% component sfhead(sec) %}<div class="section-head reveal">
         <span class="eyebrow">{{ sec.eyebrow }}</span>
         <h2>{{ sec.title }}</h2>{% if sec.lead %}
         <p class="text-muted-sf mt-3 mb-0">{{ sec.lead }}</p>{% endif %}
-      </div>{% endmacro head %}
+      </div>{% endcomponent sfhead %}
 
-{% macro art(name) %}{% if name == "tap" %}<svg viewBox="0 0 400 240" role="img" aria-label="Illustration of a kitchen tap over a sink">
+{% component sfart(name) %}{% if name == "tap" %}<svg viewBox="0 0 400 240" role="img" aria-label="Illustration of a kitchen tap over a sink">
   <rect class="i-bg" width="400" height="240"/>
   <rect class="i-soft" x="60" y="150" width="280" height="60" rx="6"/>
   <path class="i-line" d="M200 150v-70a26 26 0 0 1 52 0v12"/>
@@ -27,4 +27,6 @@
   <path class="i-soft" d="M60 190V96l22-22 22 22v94zM116 190V96l22-22 22 22v94zM172 190V96l22-22 22 22v94zM228 190V96l22-22 22 22v94zM284 190V96l22-22 22 22v94z"/>
   <rect class="i-accent" x="44" y="118" width="312" height="14" rx="3"/>
   <rect class="i-accent" x="44" y="158" width="312" height="14" rx="3"/>
-</svg>{% endif %}{% endmacro art %}
+</svg>{% endif %}{% endcomponent sfart %}
+
+{% component sfhref(url, home="") %}{% if url[:1] == "#" %}{{ home }}{{ url }}{% elif url[:1] == "/" %}{{ get_url(path=url) }}{% else %}{{ url }}{% endif %}{% endcomponent sfhref %}

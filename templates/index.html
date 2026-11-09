@@ -1,8 +1,7 @@
 {% extends "base.html" %}
-{% import "macros.html" as m %}
 
-{% block title %}{{ section.title | default(value=config.title) }}{% endblock title %}
-{% block description %}{{ section.description | default(value=config.description) }}{% endblock description %}
+{% block title %}{{ section.title or config.title }}{% endblock title %}
+{% block description %}{{ section.description or config.description or "" }}{% endblock description %}
 
 {% block content %}
 {% set x = section.extra %}
@@ -18,7 +17,7 @@
         <p class="hero-lead mt-4">{{ x.hero.lead }}</p>
         <div class="d-flex flex-wrap gap-3 mt-4">
           {% if x.hero.primary %}<a class="btn btn-sf btn-lg" href="{{ x.hero.primary.url }}">{{ x.hero.primary.label }}
-            {{ m::icon(name="arrow", class="icon icon-sm") }}
+            {{ <sficon name="arrow" class="icon icon-sm" /> }}
           </a>{% endif %}
           {% if x.hero.secondary %}<a class="btn btn-sf-ghost btn-lg" href="{{ x.hero.secondary.url }}">{{ x.hero.secondary.label }}</a>{% endif %}
         </div>
@@ -50,7 +49,7 @@
             <path class="i-line" d="M60 432h440"/>
           </svg>{% endif %}
           {% for b in x.hero.badges | default(value=[]) %}<div class="hero-badge b{{ loop.index }}">
-            <span class="dot">{{ m::icon(name=b.icon, class="icon icon-sm") }}</span>
+            <span class="dot">{{ <sficon name={b.icon} class="icon icon-sm" /> }}</span>
             <div><strong>{{ b.title }}</strong><span>{{ b.text }}</span></div>
           </div>
           {% endfor %}
@@ -64,10 +63,10 @@
 {% if x.services %}
 <section class="section section-alt" id="services">
   <div class="container">
-    {{ m::head(sec=x.services) }}
+    {{ <sfhead sec={x.services} /> }}
     <div class="row g-4">
       {% for s in x.services.items %}<div class="col-md-6 col-lg-4 reveal"><article class="sf-card">
-        <div class="icon-tile">{{ m::icon(name=s.icon) }}</div>
+        <div class="icon-tile">{{ <sficon name={s.icon} /> }}</div>
         <h3>{{ s.title }}</h3>
         <p>{{ s.text }}</p>
         {% if s.from %}<span class="from">{{ s.from }}</span>{% endif %}
@@ -81,7 +80,7 @@
 {% if x.process %}
 <section class="section" id="process">
   <div class="container">
-    {{ m::head(sec=x.process) }}
+    {{ <sfhead sec={x.process} /> }}
     <div class="row g-4 steps">
       {% for s in x.process.steps %}<div class="col-md-6 col-lg-3 reveal"><div class="step">
         <h3>{{ s.title }}</h3>
@@ -96,10 +95,10 @@
 {% if x.work %}
 <section class="section section-alt" id="work">
   <div class="container">
-    {{ m::head(sec=x.work) }}
+    {{ <sfhead sec={x.work} /> }}
     <div class="row g-4">
       {% for w in x.work.items %}<div class="col-md-4 reveal"><article class="work-card">
-        {% if w.image %}<img class="w-100" src="{{ get_url(path=w.image) }}" alt="{{ w.image_alt | default(value='') }}">{% else %}{{ m::art(name=w.art | default(value="tap")) }}{% endif %}
+        {% if w.image %}<img class="w-100" src="{{ get_url(path=w.image) }}" alt="{{ w.image_alt | default(value='') }}">{% else %}{{ <sfart name={w.art or "tap"} /> }}{% endif %}
         <div class="work-body">{% if w.tag %}<span class="tag">{{ w.tag }}</span>{% endif %}<h3>{{ w.title }}</h3><p>{{ w.text }}</p></div>
       </article></div>
       {% endfor %}
@@ -111,7 +110,7 @@
 {% if x.pricing %}
 <section class="section" id="pricing">
   <div class="container">
-    {{ m::head(sec=x.pricing) }}
+    {{ <sfhead sec={x.pricing} /> }}
     <div class="row g-4 align-items-stretch">
       {% for p in x.pricing.plans %}<div class="col-lg-4 reveal"><div class="price-card{% if p.featured %} featured{% endif %}">
         {% if p.flag %}<span class="price-flag">{{ p.flag }}</span>{% endif %}
@@ -119,7 +118,7 @@
         <div class="price">{{ p.price }} <small>{{ p.unit }}</small></div>
         <p class="text-muted-sf mb-0">{{ p.text }}</p>
         <ul class="price-list">
-          {% for f in p.features %}<li>{{ m::icon(name="check", class="icon icon-sm") }}{{ f }}</li>
+          {% for f in p.features %}<li>{{ <sficon name="check" class="icon icon-sm" /> }}{{ f }}</li>
           {% endfor %}
         </ul>
         <a class="btn {% if p.featured %}btn-sf{% else %}btn-sf-ghost{% endif %} w-100" href="{{ p.url }}">{{ p.cta }}</a>
@@ -133,7 +132,7 @@
 {% if x.reviews %}
 <section class="section section-alt" id="reviews">
   <div class="container">
-    {{ m::head(sec=x.reviews) }}
+    {{ <sfhead sec={x.reviews} /> }}
     <div class="row g-4">
       {% for r in x.reviews.items %}<div class="col-md-4 reveal"><figure class="review">
         <div class="stars" role="img" aria-label="5 out of 5 stars">{% for i in range(end=5) %}<svg aria-hidden="true"><use href="#i-star"></use></svg>{% endfor %}</div>
@@ -178,10 +177,10 @@
         <h2>{{ c.title }}</h2>
         {% if c.lead %}<p class="text-muted-sf mt-3">{{ c.lead }}</p>{% endif %}
         <ul class="contact-list mt-4">
-          {% if e.phone %}<li>{{ m::icon(name="phone") }}<div><strong>Phone</strong><a href="tel:{{ e.phone_href | default(value=e.phone) }}">{{ e.phone }}</a></div></li>{% endif %}
-          {% if e.email %}<li>{{ m::icon(name="mail") }}<div><strong>Email</strong><a href="mailto:{{ e.email }}">{{ e.email }}</a></div></li>{% endif %}
-          {% if c.address %}<li>{{ m::icon(name="pin") }}<div><strong>{{ c.address_label | default(value="Address") }}</strong><span>{{ c.address }}</span></div></li>{% endif %}
-          {% if c.hours %}<li>{{ m::icon(name="clock") }}<div><strong>Hours</strong><span>{{ c.hours }}</span></div></li>{% endif %}
+          {% if e.phone %}<li>{{ <sficon name="phone" /> }}<div><strong>Phone</strong><a href="tel:{{ e.phone_href or e.phone }}">{{ e.phone }}</a></div></li>{% endif %}
+          {% if e.email %}<li>{{ <sficon name="mail" /> }}<div><strong>Email</strong><a href="mailto:{{ e.email }}">{{ e.email }}</a></div></li>{% endif %}
+          {% if c.address %}<li>{{ <sficon name="pin" /> }}<div><strong>{{ c.address_label | default(value="Address") }}</strong><span>{{ c.address }}</span></div></li>{% endif %}
+          {% if c.hours %}<li>{{ <sficon name="clock" /> }}<div><strong>Hours</strong><span>{{ c.hours }}</span></div></li>{% endif %}
         </ul>
         <div class="map">
           <svg viewBox="0 0 480 220" role="img" aria-label="Map placeholder">
@@ -229,7 +228,7 @@
               </div>
               <div class="col-12 d-flex flex-wrap align-items-center gap-3">
                 <button class="btn btn-sf btn-lg" type="submit">{{ c.submit }}
-                  {{ m::icon(name="arrow", class="icon icon-sm") }}
+                  {{ <sficon name="arrow" class="icon icon-sm" /> }}
                 </button>
                 {% if c.note %}<span class="form-note">{{ c.note }}</span>{% endif %}
               </div>

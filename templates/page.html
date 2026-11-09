@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}{{ page.title }} | {{ config.extra.brand | default(value=config.title) }}{% endblock title %}
-{% block description %}{{ page.description | default(value=config.description) }}{% endblock description %}
+{% block description %}{{ page.description or config.description or "" }}{% endblock description %}
 
 {% block content %}
 <div class="container page-wrap">

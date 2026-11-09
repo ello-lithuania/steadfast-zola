@@ -2,7 +2,7 @@ name = "steadfast"
 description = "One-page landing theme for small service businesses: services, process, pricing, reviews, FAQ and contact, with light and dark modes. Built on Bootstrap 5, no build step."
 license = "MIT"
 homepage = "https://github.com/ello-lithuania/steadfast-zola"
-min_version = "0.19.0"
+min_version = "0.23.0"
 demo = "https://ello-lithuania.github.io/steadfast-zola/"
 
 [author]

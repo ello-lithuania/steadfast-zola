@@ -1,10 +1,10 @@
-{% import "macros.html" as m %}{% set e = config.extra %}{% set home = "" %}{% if not current_path or current_path != "/" %}{% set home = get_url(path="/") %}{% endif %}<!doctype html>
+{% set e = config.extra %}{% set cp = current_path or "" %}{% set home = "" if cp == "/" else get_url(path="/") %}<!doctype html>
 <html lang="{{ lang }}" data-bs-theme="light" class="no-js">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ config.title }}{% endblock title %}</title>
-  <meta name="description" content="{% block description %}{{ config.description | default(value="") }}{% endblock description %}">
+  <meta name="description" content="{% block description %}{{ config.description or "" }}{% endblock description %}">
   <meta name="theme-color" content="#0d5c4b">
   <meta property="og:type" content="website">
   <meta property="og:title" content="{{ config.title }}">
@@ -38,7 +38,7 @@
 {% if e.topbar_text or e.phone %}<div class="topbar py-2 d-none d-md-block">
   <div class="container d-flex justify-content-between">
     <span>{{ e.topbar_text | default(value="") }}</span>
-    {% if e.phone %}<span>Need help today? <a href="tel:{{ e.phone_href | default(value=e.phone) }}">Call {{ e.phone }}</a></span>{% endif %}
+    {% if e.phone %}<span>Need help today? <a href="tel:{{ e.phone_href or e.phone }}">Call {{ e.phone }}</a></span>{% endif %}
   </div>
 </div>{% endif %}
 
@@ -46,13 +46,13 @@
   <nav class="navbar navbar-expand-lg py-3" aria-label="Main navigation">
     <div class="container">
       <a class="brand" href="{{ get_url(path='/') }}">
-        <span class="brand-mark">{{ m::icon(name=e.brand_icon | default(value="wrench"), class="icon icon-sm") }}</span>
+        <span class="brand-mark">{{ <sficon name={e.brand_icon or "wrench"} class="icon icon-sm" /> }}</span>
         {{ e.brand | default(value=config.title) }}
       </a>
       <div class="d-flex align-items-center gap-2 order-lg-3">
         <button class="btn btn-sf-ghost theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
-          {{ m::icon(name="sun", class="icon icon-sm icon-sun") }}
-          {{ m::icon(name="moon", class="icon icon-sm icon-moon") }}
+          {{ <sficon name="sun" class="icon icon-sm icon-sun" /> }}
+          {{ <sficon name="moon" class="icon icon-sm icon-moon" /> }}
         </button>
         {% if e.cta_label %}<a class="btn btn-sf d-none d-sm-inline-flex" href="{{ home }}{{ e.cta_url | default(value='#contact') }}">{{ e.cta_label }}</a>{% endif %}
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@
       </div>
       <div class="collapse navbar-collapse order-lg-2" id="mainNav">
         <ul class="navbar-nav mx-auto">
-          {% for item in e.nav | default(value=[]) %}<li class="nav-item"><a class="nav-link" href="{% if item.url is starting_with("#") %}{{ home }}{{ item.url }}{% elif item.url is starting_with("/") %}{{ get_url(path=item.url) }}{% else %}{{ item.url }}{% endif %}">{{ item.name }}</a></li>
+          {% for item in e.nav | default(value=[]) %}<li class="nav-item"><a class="nav-link" href="{{ <sfhref url={item.url} home={home} /> }}">{{ item.name }}</a></li>
           {% endfor %}
         </ul>
       </div>
@@ -78,7 +78,7 @@
     <div class="row g-4">
       <div class="col-lg-5">
         <a class="brand" href="{{ get_url(path='/') }}">
-          <span class="brand-mark">{{ m::icon(name=e.brand_icon | default(value="wrench"), class="icon icon-sm") }}</span>
+          <span class="brand-mark">{{ <sficon name={e.brand_icon or "wrench"} class="icon icon-sm" /> }}</span>
           {{ e.brand | default(value=config.title) }}
         </a>
         {% if e.tagline %}<p class="text-muted-sf mt-3 mb-0" style="max-width:26rem">{{ e.tagline }}</p>{% endif %}
@@ -86,7 +86,7 @@
       {% for col in e.footer_columns | default(value=[]) %}<div class="col-6 col-lg-2{% if loop.first %} offset-lg-1{% endif %}">
         <h4>{{ col.title }}</h4>
         <ul>
-          {% for item in col.links %}<li><a href="{% if item.url is starting_with("#") %}{{ home }}{{ item.url }}{% elif item.url is starting_with("/") %}{{ get_url(path=item.url) }}{% else %}{{ item.url }}{% endif %}">{{ item.name }}</a></li>
+          {% for item in col.links %}<li><a href="{{ <sfhref url={item.url} home={home} /> }}">{{ item.name }}</a></li>
           {% endfor %}
         </ul>
       </div>
@@ -94,7 +94,7 @@
       {% if e.phone or e.email %}<div class="col-lg-2">
         <h4>Get in touch</h4>
         <ul>
-          {% if e.phone %}<li><a href="tel:{{ e.phone_href | default(value=e.phone) }}">{{ e.phone }}</a></li>{% endif %}
+          {% if e.phone %}<li><a href="tel:{{ e.phone_href or e.phone }}">{{ e.phone }}</a></li>{% endif %}
           {% if e.email %}<li><a href="mailto:{{ e.email }}">{{ e.email }}</a></li>{% endif %}
         </ul>
       </div>{% endif %}

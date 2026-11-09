@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}{{ section.title | default(value="Blog") }} | {{ config.extra.brand | default(value=config.title) }}{% endblock title %}
-{% block description %}{{ section.description | default(value=config.description) }}{% endblock description %}
+{% block title %}{{ section.title or "Blog" }} | {{ config.extra.brand | default(value=config.title) }}{% endblock title %}
+{% block description %}{{ section.description or config.description or "" }}{% endblock description %}
 
 {% block content %}
 <div class="container page-wrap">
   <div class="prose">
-    <h1>{{ section.title | default(value="Blog") }}</h1>
+    <h1>{{ section.title or "Blog" }}</h1>
     {{ section.content | safe }}
   </div>
   <ul class="post-list">
