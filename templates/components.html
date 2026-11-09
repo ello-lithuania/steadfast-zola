@@ -29,4 +29,4 @@
   <rect class="i-accent" x="44" y="158" width="312" height="14" rx="3"/>
 </svg>{% endif %}{% endcomponent sfart %}
 
-{% component sfhref(url, home="") %}{% if url[:1] == "#" %}{{ home }}{{ url }}{% elif url[:1] == "/" %}{{ get_url(path=url) }}{% else %}{{ url }}{% endif %}{% endcomponent sfhref %}
+{% component sfhref(url, home="") %}{% if url[:1] == "#" %}{{ home }}{{ url }}{% elif url[:1] == "/" %}{{ get_url(path=url) | trim_end(pat="/") }}{% if url[-1:] == "/" %}/{% endif %}{% else %}{{ url }}{% endif %}{% endcomponent sfhref %}

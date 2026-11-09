@@ -7,7 +7,7 @@
   <div class="prose">
     <h1>Page not found</h1>
     <p>The page you were looking for has moved or never existed.</p>
-    <a class="btn btn-sf" href="{{ get_url(path='/') }}">Back to the home page</a>
+    <a class="btn btn-sf" href="{{ get_url(path="/") | trim_end(pat="/") }}/">Back to the home page</a>
   </div>
 </div>
 {% endblock content %}

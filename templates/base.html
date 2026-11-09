@@ -1,4 +1,4 @@
-{% set e = config.extra %}{% set cp = current_path or "" %}{% set home = "" if cp == "/" else get_url(path="/") %}<!doctype html>
+{% set e = config.extra %}{% set cp = current_path or "" %}{% set root = get_url(path="/") | trim_end(pat="/") ~ "/" %}{% set home = "" if cp == "/" else root %}<!doctype html>
 <html lang="{{ lang }}" data-bs-theme="light" class="no-js">
 <head>
   <meta charset="utf-8">
@@ -45,7 +45,7 @@
 <header class="site-nav sticky-top">
   <nav class="navbar navbar-expand-lg py-3" aria-label="Main navigation">
     <div class="container">
-      <a class="brand" href="{{ get_url(path='/') }}">
+      <a class="brand" href="{{ root }}">
         <span class="brand-mark">{{ <sficon name={e.brand_icon or "wrench"} class="icon icon-sm" /> }}</span>
         {{ e.brand | default(value=config.title) }}
       </a>
@@ -77,7 +77,7 @@
   <div class="container">
     <div class="row g-4">
       <div class="col-lg-5">
-        <a class="brand" href="{{ get_url(path='/') }}">
+        <a class="brand" href="{{ root }}">
           <span class="brand-mark">{{ <sficon name={e.brand_icon or "wrench"} class="icon icon-sm" /> }}</span>
           {{ e.brand | default(value=config.title) }}
         </a>
